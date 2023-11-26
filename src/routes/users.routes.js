@@ -5,8 +5,9 @@ const userControllers = new UserControllers();
 
 const userRoutes = Router();
 
-userRoutes.post("/", userControllers.create)
-userRoutes.delete("/:id", userControllers.delete)
+userRoutes.post("/", userControllers.create);
+userRoutes.put("/:id", userControllers.update);
+userRoutes.delete("/:id", userControllers.delete);
 
 
 
