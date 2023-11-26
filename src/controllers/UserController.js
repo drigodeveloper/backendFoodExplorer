@@ -48,7 +48,7 @@ class UserControllers {
         if(!user) {
             throw new AppError("Usuário não encontrado")
         }
-        
+
         const checkEmailExists = await knex('users').where('email', email).first();
         
         if(checkEmailExists && checkEmailExists.id !== user.id) {
