@@ -31,24 +31,17 @@ class UserControllers {
 
     }
         
-    async delete (request, response) {
-        const { id } = request.params;
-
-        await knex("users").where({id}).delete();
-
-        return response.json();
-    }
-
+    
     async update (request, response) {
         const { name, email, password, old_password } = request.body;
         const { id } = request.params;
-
+        
         const user = await knex('users').where('id', id)
-
+        
         if(!user) {
             throw new AppError("Usuário não encontrado")
         }
-
+        
         const checkEmailExists = await knex('users').where('email', email).first();
         
         if(checkEmailExists && checkEmailExists.id !== user.id) {
@@ -57,21 +50,21 @@ class UserControllers {
         
         user.name = name;
         user.email = email;
-
+        
         if(password && !old_password) {
             throw new AppError("Você precisar informar a senha antiga para atualizar a senha");
         }
-
+        
         if ( password && old_password ) {
             const checkOldPassword = await compare(old_password, user.password)
             if(!checkOldPassword) {
                 throw new AppError("A senha antiga não confere")
             }
-
+            
             user.password = await hash(password, 8)
         }
-
-
+        
+        
         await knex("users")
         .where('id', id)
         .update({
@@ -80,17 +73,24 @@ class UserControllers {
             password: user.password,
             updated_at: new Date()
         });
-
+        
         response.status(201).json({ name, email, password, is_admin });
-
+        
     }
     
-    }
+    async delete (request, response) {
+        const { id } = request.params;
     
-    module.exports = UserControllers;
+        await knex("users").where({ id }).delete();
+    
+        return response.json();
+    }
+}
+
+module.exports = UserControllers;
 
 
-     
+
 
 
 
