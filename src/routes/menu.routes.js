@@ -6,7 +6,10 @@ const menuControllers = new MenuController();
 
 const menuRoutes = Router();
 
+menuRoutes.get("/", menuControllers.index);
 menuRoutes.post("/:menu_id", menuControllers.create);
+menuRoutes.get("/:id", menuControllers.show);
+menuRoutes.delete("/:id", menuControllers.delete);
 
 
 
