@@ -60,32 +60,34 @@ class UserControllers {
             if(!checkOldPassword) {
                 throw new AppError("A senha antiga não confere")
             }
-            
             user.password = await hash(password, 8)
         }
         
-        
-        await knex("users")
-        .where('id', id)
-        .update({
-            name: user.name,
-            email: user.email,
-            password: user.password,
-            updated_at: new Date()
+            await knex("users")
+            .where('id', id)
+            .update({
+                name: user.name,
+                email: user.email,
+                password: user.password,
+                updated_at: new Date()
         });
-        
-        response.status(201).json({ name, email, password, is_admin });
-        
+            
+        response.status(201).json({ name, email, password });
+    
     }
-    
-    async delete (request, response) {
-        const { id } = request.params;
-    
-        await knex("users").where({ id }).delete();
-    
-        return response.json();
-    }
+            
+            
+        
+        async delete (request, response) {
+            const { id } = request.params;
+        
+            await knex("users").where({ id }).delete();
+        
+            return response.json();
+        }
+        
 }
+    
 
 module.exports = UserControllers;
 
