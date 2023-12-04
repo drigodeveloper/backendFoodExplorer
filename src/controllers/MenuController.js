@@ -1,3 +1,4 @@
+const { keyframes } = require("styled-components");
 const knex = require("../database/knex")
 
 
@@ -47,16 +48,30 @@ class MenuController {
     }
 
     async index(request, response) {
-        const { id } = request.query;
+        const { title, id, tags } = request.query;
 
-        const menuIndex = await knex('menu')
-        .where('id', id)
-        .orderBy('title');
+        let menuIndex;
 
-        return response.json(menuIndex);
+        if(tags) {
+            const filterTags = tags.split(',').map(tag => tag.trim());
+
+            menuIndex = knex('tags')
+            .whereIn("name", filterTags)
+        }else{
+            menuIndex = await knex('menu')
+            .where({id})
+            .where("title", "like", `%${title}%`)
+
+            // .whereLike("title", `%${title}%`)
+            .orderBy('title');
+        }
+        return response.json({menuIndex});
     }
-
 }
+
+
+
+
 
 module.exports = MenuController;
 
