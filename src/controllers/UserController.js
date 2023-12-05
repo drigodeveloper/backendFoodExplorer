@@ -34,15 +34,17 @@ class UserControllers {
     
     async update (request, response) {
         const { name, email, password, old_password } = request.body;
-        const { id } = request.params;
+        const user_id = request.user.id
+
         
-        const user = await knex('users').where('id', id)
+        
+        const user = await knex('users').where({ user_id });
         
         if(!user) {
             throw new AppError("Usuário não encontrado")
         }
         
-        const checkEmailExists = await knex('users').where('email', email).first();
+        const checkEmailExists = await knex('users').where({ email }).first();
         
         if(checkEmailExists && checkEmailExists.id !== user.id) {
             throw new AppError("Este e-mail ja esta em uso");
@@ -64,7 +66,7 @@ class UserControllers {
         }
         
             await knex("users")
-            .where('id', id)
+            .where({user_id})
             .update({
                 name: user.name,
                 email: user.email,
@@ -75,17 +77,7 @@ class UserControllers {
         response.status(201).json({ name, email, password });
     
     }
-            
-            
-        
-        async delete (request, response) {
-            const { id } = request.params;
-        
-            await knex("users").where({ id }).delete();
-        
-            return response.json();
-        }
-        
+                    
 }
     
 
