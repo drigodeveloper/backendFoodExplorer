@@ -3,7 +3,7 @@ const knex = require("../database/knex")
 
 class MenuController {
     async create(request, response) {
-        const { title, description, category, price, tags } = request.body;
+        const { title, description, category, price, tags } = request.body
         const { id } = request.params;
 
         
@@ -11,7 +11,8 @@ class MenuController {
             title, 
             description, 
             category, 
-            price
+            price,
+            avatar: ''
         });
         
         const tagsInsert = tags.map(name => {
@@ -23,7 +24,8 @@ class MenuController {
         });
         
         await knex('tags').insert(tagsInsert)
-        return response.send({ title, description, category, price, tags });
+        
+        return response.json({ title, description, category, price, tags });
     }
 
     async show(request, response) {
