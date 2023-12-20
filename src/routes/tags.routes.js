@@ -7,6 +7,7 @@ const tagsController = new TagsController();
 const tagsRoutes = Router();
 
 tagsRoutes.get("/:menu_id", tagsController.show);
+tagsRoutes.delete("/:id", tagsController.delete);
 
 
 

@@ -5,6 +5,7 @@ const authConfig = require("../config/auth");
 function ensuresAuthentication(request, response, next) {
     
     const authHeader = request.headers.authorization;
+    
 
     if(!authHeader) {
         throw new AppError("JWT token inválido", 401)

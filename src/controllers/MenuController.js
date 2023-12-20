@@ -4,7 +4,7 @@ const knex = require("../database/knex")
 class MenuController {
     async create(request, response) {
         const { title, description, category, price, tags } = request.body;
-        // const { menu_id } = request.params;
+        const { id } = request.params;
 
         
         const [menu_id] = await knex('menu').insert({
@@ -17,7 +17,8 @@ class MenuController {
         const tagsInsert = tags.map(name => {
             return {
                 name,
-                menu_id
+                id,
+                menu_id: menu_id
             }
         });
         
@@ -26,10 +27,11 @@ class MenuController {
     }
 
     async show(request, response) {
-        const { id } = request.params;
+        const { id } = request.params
+
 
         const menu = await knex('menu').where({ id }).first();
-        const tags = await knex('tags').where({menu_id: id}).orderBy('name')
+        const tags = await knex('tags').where({menu_id}).orderBy('name')
 
         return response.json({
             ...menu,
@@ -39,15 +41,19 @@ class MenuController {
     }
 
     async delete(request, response) {
-        const { id } = request.params;
+        const { id } = request.params
 
-        await knex('menu').where({id}).delete();
 
-        return response.json();
+        await knex('menu').where({ id }).delete();
+
+        const message = "Prato excluido com sucesso!!"
+
+        return response.json(message);
     }
 
     async index(request, response) {
-        const { title, id, tags } = request.query;
+        const { title, tags } = request.query;
+        const id = request.params
 
         let menuIndex;
 

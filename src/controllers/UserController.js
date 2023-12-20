@@ -5,7 +5,7 @@ const { hash, compare } = require('bcrypt');
 
 class UserControllers {
     async create(request, response) {
-        const { name, email, password, is_admin } = request.body;
+        const { name, email, password } = request.body;
         const checkEmailExists = await knex('users').where('email', email).first();
 
         if(!name) {
@@ -23,11 +23,10 @@ class UserControllers {
         await knex("users").insert({
             name, 
             email, 
-            password: criptPassword,
-            is_admin
+            password: criptPassword
         });
 
-        response.status(201).json({ name, email, password, is_admin });
+        response.status(201).json({ name, email, password });
 
     }
         
