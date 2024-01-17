@@ -16,10 +16,10 @@ menuRoutes.use(ensuresAuthentication)
 
 
 menuRoutes.get("/", menuControllers.index);
-menuRoutes.post("/", verifyUserAuthorization("true"), menuControllers.create);
+menuRoutes.post("/", verifyUserAuthorization(["admin"]), menuControllers.create);
 menuRoutes.get("/:id", menuControllers.show);
-menuRoutes.delete("/:id", verifyUserAuthorization("true"), menuControllers.delete);
-menuRoutes.patch("/avatar",  verifyUserAuthorization("true"), upload.single("avatar"), (request, response) => {
+menuRoutes.delete("/:id", verifyUserAuthorization(["admin"]), menuControllers.delete);
+menuRoutes.patch("/avatar",  verifyUserAuthorization(["admin"]), upload.single("avatar"), (request, response) => {
     console.log(request.file.filename)
     const message = "Imagem salva com sucesso !!"
     response.json(message);
