@@ -10,7 +10,7 @@ class SessionsController {
     async create(request, response) {
         const { email, password } = request.body;
         
-        const user = await knex("users").where('email', email).first();
+        const user = await knex("users").where({email}).first();
         
 
         if(!user) {
@@ -25,7 +25,7 @@ class SessionsController {
 
 
         const { secret, expiresIn } = authConfig.jwt;
-        const token = sign({is_admin: user.is_admin}, secret, {
+        const token = sign({role: user.role}, secret, {
             subject: String(user.id),
             expiresIn
         })

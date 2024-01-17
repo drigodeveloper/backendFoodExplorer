@@ -14,11 +14,11 @@ function ensuresAuthentication(request, response, next) {
     const [, token] = authHeader.split(" ");
     
     try {
-       const { is_admin, sub: user_id } = verify(token, authConfig.jwt.secret);
+       const { role, sub: user_id } = verify(token, authConfig.jwt.secret);
 
        request.user = {
         id: Number(user_id),
-        is_admin
+        role
        };
        return next();
     }catch {
