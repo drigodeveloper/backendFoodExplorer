@@ -38,16 +38,16 @@ class MenuController {
         const { id } = request.params
 
 
-        const menu = await knex("menu").where({ id }).first();
+        const menu = await knex("menu").where( {id} ).first();
         
         const menu_id = menu.id
         
-        // const tags = await knex("tags").where({id: menu_id}).orderBy("name")
+        const tags = await knex("tags").where({id: menu_id}).orderBy("name")
 
         return response.json({
             ...menu,
             menu,
-            //tags
+            tags
         })
     }
 
@@ -74,14 +74,14 @@ class MenuController {
             menuIndex = await knex('tags')
             .whereIn("name", filterTags)
         }else{
-            menuIndex = await knex('menu')
-            .where({id})
-            .where("title", "like", `%${title}%`)
+            menuIndex = await knex("menu")
+            // .where("title", "like", `%${title}%`)
 
             // .whereLike("title", `%${title}%`)
             .orderBy('title');
         }
-        return response.json({menuIndex});
+
+        return response.json(menuIndex);
     }
 }
 
